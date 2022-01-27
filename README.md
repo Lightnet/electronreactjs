@@ -1,4 +1,4 @@
-# electron react graph DB
+# electron react js
 
 # Created by: Lightnet
 
@@ -18,6 +18,12 @@
   - init server
   - open browser
 - webpack complie client to bundle to renderer.js
+
+```
+  npm install
+  npm run dev
+```
+
 
 # links:
 - https://github.com/electron/electron
