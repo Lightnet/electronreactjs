@@ -1,11 +1,39 @@
 
+/*
+  script security need to allow check file else warning...
+
+
+*/
+
+
+// https://stackoverflow.com/questions/64478489/i-added-a-content-security-policy-but-still-the-security-warning-appears
+// https://stackoverflow.com/questions/37828758/electron-js-how-to-minimize-close-window-to-system-tray-and-restore-window-back
+// https://dev.to/franamorim/tutorial-alarm-widget-with-electron-react-2-34dd
+// https://livebook.manning.com/book/electron-in-action/chapter-9/25
+// https://www.electronjs.org/docs/latest/tutorial/tray
+
+
 
 // Modules to control application life and create native browser window
-process.env['ELECTRON_DISABLE_SECURITY_WARNINGS'] = 'true';
+//process.env['ELECTRON_DISABLE_SECURITY_WARNINGS'] = 'true';
 
-const {app, BrowserWindow, session} = require('electron')
+const {
+  app
+  , BrowserWindow
+  //, session
+  , ipcMain 
+  , Menu
+  , Tray
+} = require('electron')
+
 const path = require('path')
 const nodemon = require('nodemon');
+
+const config = require('./config');
+console.log(config);
+
+
+//process.env['ELECTRON_DISABLE_SECURITY_WARNINGS'] = 'true'; //disable security , not recommand
 
 //import {app, BrowserWindow} from 'electron';
 //import * as url from 'url';
@@ -17,6 +45,7 @@ let scriptPath = path.join(__dirname, './src/server/server.js')
 function createWindow () {
   // Create the browser window.
   const mainWindow = new BrowserWindow({
+    icon:path.join(__dirname, './tray01.png'),
     width: 800,
     height: 600,
     webPreferences: {
@@ -31,13 +60,36 @@ function createWindow () {
 
 
   // Open the DevTools.
-  // mainWindow.webContents.openDevTools()
+  mainWindow.webContents.openDevTools()
 }
+
+
+let tray = null;
 
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
 app.whenReady().then(() => {
+  // https://www.electronjs.org/docs/latest/api/dock
+  //tray = new Tray('/path/to/my/icon')
+  //if(app.dock)app.dock.hide();
+  //app.dock.hide();
+
+  tray = new Tray(path.join(__dirname, './tray01.png'))
+  const contextMenu = Menu.buildFromTemplate([
+    { label: '', type: 'radio' },
+    { label: 'Item2', type: 'radio' },
+    { label: 'Item3', type: 'radio', checked: true },
+    { label: 'Item4', type: 'radio' },
+    { label: 'Quit', click() { app.quit(); }}
+  ])
+  tray.setToolTip('This is my application.')
+  tray.setContextMenu(contextMenu)
+
+
+
+
+
 
   //server();
   // https://github.com/remy/nodemon/blob/HEAD/doc/requireable.md
@@ -62,9 +114,16 @@ app.whenReady().then(() => {
     process.exit();
   });
 
-
-
-
+  // https://www.electronjs.org/docs/latest/api/ipc-main
+  ipcMain.on('asynchronous-message', (event, arg) => {
+    console.log(arg) // prints "ping"
+    event.reply('asynchronous-reply', 'pong')
+  })
+  
+  ipcMain.on('synchronous-message', (event, arg) => {
+    console.log(arg) // prints "ping"
+    event.returnValue = 'pong'
+  })
 
   createWindow()
 
