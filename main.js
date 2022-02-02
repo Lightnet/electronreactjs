@@ -1,17 +1,17 @@
+/*
+  LICENSE: MIT
+  Created by: Lightnet
+*/
 
 /*
   script security need to allow check file else warning...
-
-
 */
-
 
 // https://stackoverflow.com/questions/64478489/i-added-a-content-security-policy-but-still-the-security-warning-appears
 // https://stackoverflow.com/questions/37828758/electron-js-how-to-minimize-close-window-to-system-tray-and-restore-window-back
 // https://dev.to/franamorim/tutorial-alarm-widget-with-electron-react-2-34dd
 // https://livebook.manning.com/book/electron-in-action/chapter-9/25
 // https://www.electronjs.org/docs/latest/tutorial/tray
-
 
 
 // Modules to control application life and create native browser window
@@ -45,10 +45,11 @@ let scriptPath = path.join(__dirname, './src/server/server.js')
 function createWindow () {
   // Create the browser window.
   const mainWindow = new BrowserWindow({
-    icon:path.join(__dirname, './tray01.png'),
-    width: 800,
-    height: 600,
-    webPreferences: {
+    icon:path.join(__dirname, './tray01.png')
+    , frame: false
+    , width: 800
+    , height: 600
+    , webPreferences: {
       preload: path.join(__dirname, 'preload.js')
     }
   })

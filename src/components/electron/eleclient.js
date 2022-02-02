@@ -1,8 +1,11 @@
+/*
+  LICENSE: MIT
+  Created by: Lightnet
+*/
+
 // https://developer.mozilla.org/en-US/docs/Web/Events/Creating_and_triggering_events
 
 import React from "react";
-//const { ipcRenderer } = require('electron')
-//import { ipcRenderer } from 'electron';
 
 export default function EleClient(){
 

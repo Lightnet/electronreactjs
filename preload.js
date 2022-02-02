@@ -1,3 +1,8 @@
+/*
+  LICENSE: MIT
+  Created by: Lightnet
+*/
+
 // https://www.electronjs.org/docs/latest/api/ipc-renderer
 // https://developer.mozilla.org/en-US/docs/Web/Events/Creating_and_triggering_events
 
@@ -8,7 +13,6 @@ ipcRenderer.on('asynchronous-reply', (event, arg) => {
   console.log(arg) // prints "pong"
 })
 ipcRenderer.send('asynchronous-message', 'ping')
-
 
 // All of the Node.js APIs are available in the preload process.
 // It has the same sandbox as a Chrome extension.
@@ -22,7 +26,6 @@ window.addEventListener('DOMContentLoaded', () => {
     //replaceText(`${type}-version`, process.versions[type])
   //}
 
-  
   window.addEventListener('calleletron', () => {
     ipcRenderer.send('asynchronous-message', 'ping')
   });

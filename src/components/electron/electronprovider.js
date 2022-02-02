@@ -1,14 +1,13 @@
 /*
- 
- */
+  LICENSE: MIT
+  Created by: Lightnet
+*/
 
 // https://kentcdodds.com/blog/how-to-use-react-context-effectively
-
 
 import React, { createContext, useMemo, useState } from "react";
 
 export const electronContext = createContext();
-
 
 export function useElectron(){
   const context = useContext(electronContext);
