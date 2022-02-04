@@ -15,7 +15,6 @@ export default function ButtonApi(){
     console.log(data);
   }
 
-
   return <>
     <button onClick={clickTest}>Test</button>
   </>
