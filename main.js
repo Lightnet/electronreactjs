@@ -12,8 +12,8 @@
 // https://dev.to/franamorim/tutorial-alarm-widget-with-electron-react-2-34dd
 // https://livebook.manning.com/book/electron-in-action/chapter-9/25
 // https://www.electronjs.org/docs/latest/tutorial/tray
-
-
+// https://stackoverflow.com/questions/48854265/why-do-i-see-an-electron-security-warning-after-updating-my-electron-project-t
+// https://content-security-policy.com/examples/electron/
 // Modules to control application life and create native browser window
 //process.env['ELECTRON_DISABLE_SECURITY_WARNINGS'] = 'true';
 
@@ -24,33 +24,34 @@ const {
   , ipcMain 
   , Menu
   , Tray
+  , protocol 
 } = require('electron')
 
 const path = require('path')
 const nodemon = require('nodemon');
 
 const config = require('./config');
-console.log(config);
-
+//console.log(config);
 
 //process.env['ELECTRON_DISABLE_SECURITY_WARNINGS'] = 'true'; //disable security , not recommand
-
-//import {app, BrowserWindow} from 'electron';
-//import * as url from 'url';
-//import * as path from 'path';
 
 //const server = require('./server');
 let scriptPath = path.join(__dirname, './src/server/server.js')
 //const basePath = path.dirname(path.dirname(scriptPath));
+
+var mainWindow;
 function createWindow () {
   // Create the browser window.
-  const mainWindow = new BrowserWindow({
+  mainWindow = new BrowserWindow({
     icon:path.join(__dirname, './tray01.png')
     , frame: false
     , width: 800
     , height: 600
     , webPreferences: {
-      preload: path.join(__dirname, 'preload.js')
+      //preload: path.join(__dirname, 'preload.js')
+      preload: path.join(app.getAppPath(), 'preload.js')
+      // sandbox: true
+      , allowEval: true // This is the key!
     }
   })
 
@@ -59,12 +60,11 @@ function createWindow () {
   mainWindow.loadURL('http://localhost:3000')
   //mainWindow.loadURL('http://localhost:8080')
 
-
   // Open the DevTools.
   mainWindow.webContents.openDevTools()
 }
 
-
+// https://www.electronjs.org/docs/latest/api/protocol
 let tray = null;
 
 // This method will be called when Electron has finished
@@ -86,11 +86,6 @@ app.whenReady().then(() => {
   ])
   tray.setToolTip('This is my application.')
   tray.setContextMenu(contextMenu)
-
-
-
-
-
 
   //server();
   // https://github.com/remy/nodemon/blob/HEAD/doc/requireable.md
@@ -124,6 +119,40 @@ app.whenReady().then(() => {
   ipcMain.on('synchronous-message', (event, arg) => {
     console.log(arg) // prints "ping"
     event.returnValue = 'pong'
+  })
+
+  ipcMain.on('window', (event, arg) => {
+    console.log(arg) // prints "ping"
+    //event.returnValue = 'pong'
+    if(arg == 'minimize'){
+      console.log('window:',arg);
+      if(mainWindow){
+        mainWindow.minimize()
+      }
+    }
+
+    if(arg == 'fullscreen'){
+      console.log('window:',arg);
+      if(mainWindow){
+        let isFullScreen = mainWindow.isFullScreen()
+        if(isFullScreen){
+          mainWindow.setFullScreen(false);
+        }else{
+          mainWindow.setFullScreen(true);
+        }
+      }
+    }
+
+    if(arg == 'close'){
+      console.log('window:',arg);
+      if(mainWindow){
+        let isClose = mainWindow.isClosable();
+        if(isClose){
+          //mainWindow.close();
+          app.quit();
+        }
+      }
+    }
   })
 
   createWindow()

@@ -29,4 +29,16 @@ window.addEventListener('DOMContentLoaded', () => {
   window.addEventListener('calleletron', () => {
     ipcRenderer.send('asynchronous-message', 'ping')
   });
+
+  window.addEventListener('close', () => {
+    ipcRenderer.send('window', 'close')
+  });
+
+  window.addEventListener('fullscreen', () => {
+    ipcRenderer.send('window', 'fullscreen')
+  });
+
+  window.addEventListener('minimize', () => {
+    ipcRenderer.send('window', 'minimize')
+  });
 })

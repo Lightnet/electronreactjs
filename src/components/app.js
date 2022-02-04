@@ -7,10 +7,11 @@ import React from "react";
 import ButtonApi from "./buttonapi";
 import EleClient from "./electron/eleclient";
 import ElectronHeader from "./electron/electronheader";
+import { ThemeProvider } from "./theme/themeprovider";
 
 export default function MyApp(){
 
-  return <>
+  return <ThemeProvider>
     <ElectronHeader></ElectronHeader>
     <div style={{
     position:'fixed'
@@ -26,5 +27,5 @@ export default function MyApp(){
     <EleClient></EleClient>
 
   </div>
-  </>
+  </ThemeProvider>
 }

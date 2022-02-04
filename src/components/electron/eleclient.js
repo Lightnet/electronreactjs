@@ -12,13 +12,10 @@ export default function EleClient(){
   function clickTest(){
     //console.log(ipcRenderer);
     const event = new Event('calleletron');
-
     window.dispatchEvent(event);
-
   }
 
   return <>
     <button onClick={clickTest}> Test Ele</button>
-  
   </>
 }
