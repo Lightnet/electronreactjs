@@ -13,7 +13,7 @@ var bodyParser = require('body-parser')
 
 function main(){
   //app.use(express.static('public'))
-  app.use(express.static('.'))
+  app.use(express.static('./public'))
   app.use(cors())
   // parse application/x-www-form-urlencoded
   app.use(bodyParser.urlencoded({ extended: false }))

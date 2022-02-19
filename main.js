@@ -14,6 +14,7 @@
 // https://www.electronjs.org/docs/latest/tutorial/tray
 // https://stackoverflow.com/questions/48854265/why-do-i-see-an-electron-security-warning-after-updating-my-electron-project-t
 // https://content-security-policy.com/examples/electron/
+// https://stackoverflow.com/questions/52178592/how-to-set-the-devtools-window-position-in-electron
 // Modules to control application life and create native browser window
 //process.env['ELECTRON_DISABLE_SECURITY_WARNINGS'] = 'true';
 
@@ -40,7 +41,9 @@ let scriptPath = path.join(__dirname, './src/server/server.js')
 //const basePath = path.dirname(path.dirname(scriptPath));
 
 var mainWindow;
+var devtools;
 function createWindow () {
+  devtools = new BrowserWindow()
   // Create the browser window.
   mainWindow = new BrowserWindow({
     icon:path.join(__dirname, './tray01.png')
@@ -49,7 +52,7 @@ function createWindow () {
     , height: 600
     , webPreferences: {
       //preload: path.join(__dirname, 'preload.js')
-      preload: path.join(app.getAppPath(), 'preload.js')
+      preload: path.join(app.getAppPath(), '/public/preload.js')
       // sandbox: true
       , allowEval: true // This is the key!
     }
@@ -61,7 +64,10 @@ function createWindow () {
   //mainWindow.loadURL('http://localhost:8080')
 
   // Open the DevTools.
-  mainWindow.webContents.openDevTools()
+  //mainWindow.webContents.openDevTools()
+
+  mainWindow.webContents.setDevToolsWebContents(devtools.webContents)
+  mainWindow.webContents.openDevTools({mode: 'detach'})
 }
 
 // https://www.electronjs.org/docs/latest/api/protocol
@@ -173,8 +179,6 @@ app.whenReady().then(() => {
     })
   })
   */
-
-
 })
 
 // Quit when all windows are closed, except on macOS. There, it's common

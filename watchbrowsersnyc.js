@@ -9,7 +9,7 @@ const browserSync = require("browser-sync").create();
 
 // Start the server
 browserSync.init({
-    server: "."
+    server: "./public"
   , ui:false
   , watch: true
   //, port: 8080
